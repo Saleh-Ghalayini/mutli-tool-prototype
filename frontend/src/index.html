@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Tool AI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>Multi-Tool AI Platform</h1>
+            <p>Offline AI-powered productivity tools</p>
+        </header>
+        
+        <main>
+            <div class="tools-grid" id="tools-grid">
+                <div class="tool-card" data-tool="pdf-summarizer">
+                    <div class="tool-icon">📄</div>
+                    <h3>PDF Summarizer</h3>
+                    <p>Extract and summarize text from PDF documents</p>
+                    <span class="status">Ready</span>
+                </div>
+                
+                <div class="tool-card" data-tool="keyword-detector" disabled>
+                    <div class="tool-icon">🔍</div>
+                    <h3>Keyword Detector</h3>
+                    <p>Detect and extract keywords from text</p>
+                    <span class="status">Coming Soon</span>
+                </div>
+                
+                <div class="tool-card" data-tool="text-classifier" disabled>
+                    <div class="tool-icon">🏷️</div>
+                    <h3>Text Classifier</h3>
+                    <p>Classify and categorize text content</p>
+                    <span class="status">Coming Soon</span>
+                </div>
+            </div>
+            
+            <div class="tool-interface" id="tool-interface" style="display: none;">
+                <div class="tool-header">
+                    <button id="back-btn">← Back to Tools</button>
+                    <h2 id="tool-title">Tool Name</h2>
+                </div>
+                <div class="tool-content" id="tool-content">
+                    <!-- Tool-specific interface will be loaded here -->
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p>Offline AI Tools • Privacy First • No Data Collection</p>
+        </footer>
+    </div>
+    
+    <script type="module" src="main.js"></script>
+</body>
+</html>

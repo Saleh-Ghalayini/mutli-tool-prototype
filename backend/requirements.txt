@@ -1,0 +1,23 @@
+# Multi-Tool AI Platform - Python Backend
+# Fast and reliable LLM inference with GGUF support
+
+# Core dependencies
+fastapi==0.115.6
+uvicorn[standard]==0.32.1
+python-multipart==0.0.20
+
+# LLM inference
+llama-cpp-python==0.3.14
+
+# PDF processing
+PyPDF2==3.0.1
+pdfplumber==0.11.4
+
+# Data validation
+pydantic==2.10.4
+
+# Async support
+aiofiles==24.1.0
+
+# Optional: For better performance
+# Install with: CMAKE_ARGS="-DGGML_BLAS=ON -DGGML_BLAS_VENDOR=OpenBLAS" pip install llama-cpp-python

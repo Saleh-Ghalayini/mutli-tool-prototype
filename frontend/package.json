@@ -1,0 +1,19 @@
+{
+  "name": "multi-tool-ai",
+  "version": "1.0.0",
+  "description": "A multi-tool platform made up of small, single-use AI utilities",
+  "main": "src/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@tauri-apps/cli": "^2.0.0"
+  },
+  "type": "module"
+}
