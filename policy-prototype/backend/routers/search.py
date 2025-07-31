@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Query, HTTPException
+from fastapi.responses import StreamingResponse
 from services.policy.vector_store_service import load_embeddings
 from services.policy.embedding_service import embed_chunks
 
@@ -18,8 +19,8 @@ def cosine_similarity(a: List[float], b: List[float]) -> float:
     return float(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)))
 
 @router.get("/policy/search", tags=["Policy"])
-def search_policy(query: str = Query(..., description="Search query"), top_k: int = 5):
-    """Search for relevant policy chunks using vector similarity."""
+def search_policy(query: str = Query(..., description="Search query"), top_k: int = 3):
+    """Search for relevant policy chunks using vector similarity and stream LLM output."""
     client_id = "default_client"
     records = load_embeddings(client_id)
     if not records:
@@ -34,10 +35,5 @@ def search_policy(query: str = Query(..., description="Search query"), top_k: in
     # Build the RAG prompt using the top chunks
     context_chunks = [r["chunk"] for r in results]
     rag_prompt = build_rag_prompt(context_chunks, query)
-    llm_answer = run_llm(rag_prompt)
-    return {
-        "results": results,
-        "rag_prompt": rag_prompt,
-        "llm_answer": llm_answer,
-        "message": f"Top {top_k} most similar chunks returned, RAG prompt built, and LLM answer generated."
-    }
+    llm_stream = run_llm(rag_prompt)
+    return StreamingResponse(llm_stream, media_type="text/plain")

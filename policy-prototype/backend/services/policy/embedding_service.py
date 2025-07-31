@@ -1,10 +1,12 @@
-from typing import List
 
-# Placeholder for embedding model integration (e.g., sentence-transformers, ONNX, etc.)
+from typing import List
+from sentence_transformers import SentenceTransformer
+
+# Load the model once at module import
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
 def embed_chunks(chunks: List[str]) -> List[List[float]]:
     """
-    Convert a list of text chunks into embeddings (list of floats per chunk).
-    This is a stub; replace with real embedding model logic.
+    Convert a list of text chunks into embeddings using a real model.
     """
-    # For now, return dummy embeddings (e.g., all zeros)
-    return [[0.0] * 384 for _ in chunks]
+    return model.encode(chunks, convert_to_numpy=True).tolist()
