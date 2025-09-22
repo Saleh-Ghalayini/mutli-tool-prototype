@@ -1,18 +1,18 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "Multi-Tool AI",
+  "productName": "Policy Prototype",
   "version": "0.1.0",
-  "identifier": "com.multitoolai.desktop",
+  "identifier": "com.policyprototype.desktop",
   "build": {
-    "frontendDist": "../dist",
-    "devUrl": "http://localhost:3000"
+    "frontendDist": "../frontend/dist",
+    "devUrl": "http://localhost:5173"
   },
   "app": {
     "windows": [
       {
-        "title": "Multi-Tool AI",
-        "width": 800,
-        "height": 600,
+        "title": "Policy Prototype",
+        "width": 900,
+        "height": 700,
         "resizable": true,
         "fullscreen": false
       }
@@ -32,8 +32,8 @@
       "icons/icon.ico"
     ],
     "resources": [
-      "models/*",
-      "../backend/**/*"
+      "../models/*",
+      "../policy_data/**/*"
     ]
   }
 }

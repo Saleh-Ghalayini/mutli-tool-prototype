@@ -1,184 +1,332 @@
-# Multi-Tool AI Platform 🚀
+# Multi-Tool AI Prototype
 
-A sophisticated desktop application providing **offline AI-powered productivity tools** built with Tauri, Python FastAPI, and modern web technologies.
+A full-stack offline AI-powered policy document search and question-answering system built with FastAPI and Vue.js.
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
-![Python](https://img.shields.io/badge/python-3.8+-green.svg)
-![Rust](https://img.shields.io/badge/rust-1.70+-orange.svg)
-![Tauri](https://img.shields.io/badge/tauri-2.x-blue.svg)
+## Overview
 
-## 🌟 Overview
+This application allows users to upload PDF policy documents, processes them into a searchable knowledge base, and provides real-time AI-powered answers to questions about the content. The system operates entirely offline using local AI models, ensuring data privacy and security.
 
-This platform delivers **enterprise-grade AI capabilities** without requiring internet connectivity, ensuring complete privacy and data security. All AI processing happens locally on your machine using Microsoft's Phi-3 Mini model.
+## Architecture
 
-### ✨ Key Features
+### Backend (FastAPI)
 
-- 🔒 **100% Offline AI Processing**: Complete functionality without internet
-- 📄 **Professional PDF Summarization**: Advanced prompt engineering with hallucination detection  
-- 🖥️ **Native Desktop Experience**: Built with Tauri for optimal performance
-- 🛡️ **Privacy-First Design**: No data collection or external dependencies
-- 🌐 **Cross-Platform Support**: Windows, macOS, and Linux
-- 🎨 **Modern UI**: Glassmorphism design with smooth animations
+- RESTful API with streaming response support
+- Offline AI inference using llama-cpp-python
+- Vector similarity search for document retrieval
+- PDF text extraction and processing
+- Retrieval-Augmented Generation (RAG) implementation
 
-## 🛠️ Tech Stack
+### Frontend (Vue.js 3)
 
-| Component | Technology |
-|-----------|-------------|
-| **Frontend** | HTML5/CSS3/JavaScript + Vite |
-| **Backend** | Python FastAPI + Service Architecture |
-| **AI Model** | Microsoft Phi-3 Mini (2.3GB GGUF) |
-| **Desktop** | Tauri 2.x + Rust |
-| **Documents** | PyMuPDF for PDF processing |
+- Real-time chat interface with streaming responses
+- Dark theme optimized for extended use
+- Responsive design with modern UI components
+- TypeScript support for type safety
 
-## 🚀 Quick Start
+## Tech Stack
+
+### Backend Technologies
+
+- **FastAPI**: Modern Python web framework for building APIs
+- **llama-cpp-python**: Python bindings for llama.cpp, enables local LLM inference
+- **sentence-transformers**: Pre-trained models for text embeddings
+- **PyPDF2**: PDF text extraction library
+- **NumPy**: Mathematical operations for vector similarity
+- **Uvicorn**: ASGI server for production deployment
+- **Pydantic**: Data validation and settings management
+
+### Frontend Technologies
+
+- **Vue.js 3**: Progressive JavaScript framework with Composition API
+- **Vite**: Fast build tool and development server
+- **TypeScript**: Type-safe JavaScript for better development experience
+- **Axios**: HTTP client for API communication
+
+### AI Models
+
+- **Microsoft Phi-3 Mini**: Quantized GGUF model for text generation
+- **all-MiniLM-L6-v2**: Sentence transformer for text embeddings
+
+## Data Processing Pipeline
+
+### 1. Document Upload
+
+```
+PDF Files → File Storage → Text Extraction → Chunking → Embedding → Vector Store
+```
+
+### 2. Query Processing
+
+```
+User Query → Embedding → Similarity Search → Context Retrieval → LLM Generation → Streaming Response
+```
+
+## Core Components
+
+### Text Chunking
+
+The system splits documents into manageable chunks using sentence boundaries:
+
+- **Max Length**: 500 characters per chunk
+- **Overlap**: 50 characters between consecutive chunks
+- **Strategy**: Sentence-aware splitting to preserve context
+- **Purpose**: Optimizes embedding quality and retrieval accuracy
+
+### Embedding Generation
+
+Text chunks are converted to vector representations:
+
+- **Model**: all-MiniLM-L6-v2 (384-dimensional vectors)
+- **Purpose**: Enables semantic similarity search
+- **Storage**: JSON Lines format for efficient loading
+- **Encoding**: Real-time embedding for user queries
+
+### Vector Similarity Search
+
+Retrieves relevant document chunks:
+
+- **Algorithm**: Cosine similarity between query and chunk embeddings
+- **Top-K Selection**: Returns 3 most relevant chunks by default
+- **Scoring**: Normalized similarity scores (0-1 range)
+- **Performance**: In-memory operations for fast retrieval
+
+### Knowledge Base Management
+
+- **Client Isolation**: Separate vector stores per client
+- **Persistence**: File-based storage in `policy_data/vector_store/`
+- **Format**: JSON Lines with chunk text and embeddings
+- **Scalability**: Efficient loading and updating of embeddings
+
+### Tokenization and Text Processing
+
+- **PDF Extraction**: PyPDF2 handles various PDF formats
+- **Text Normalization**: Preserves formatting while cleaning content
+- **Sentence Detection**: Regex-based sentence boundary detection
+- **Overlap Handling**: Maintains context continuity across chunks
+
+### LLM Integration
+
+Local AI model handling:
+
+- **Model Loading**: Singleton pattern for memory efficiency
+- **Context Window**: 2048 tokens maximum
+- **Threading**: Multi-threaded inference for performance
+- **Streaming**: Real-time token generation with yield
+- **Memory Management**: Persistent model loading to avoid reload delays
+
+### I/O Operations
+
+#### File Handling
+
+- **Upload Processing**: Multi-file support with validation
+- **Storage Strategy**: Organized directory structure
+- **Format Support**: PDF documents with text content
+- **Error Handling**: Graceful handling of corrupted or unsupported files
+
+#### API Communication
+
+- **Request/Response**: JSON format for structured data
+- **Streaming**: Server-Sent Events for real-time responses
+- **CORS**: Configured for frontend-backend communication
+- **Error Handling**: HTTP status codes with detailed error messages
+
+#### Database Operations
+
+- **Vector Storage**: File-based JSON Lines format
+- **Query Processing**: In-memory loading for fast access
+- **Data Integrity**: Validation of embeddings and metadata
+- **Backup Strategy**: File-based storage enables easy backup
+
+## Installation
 
 ### Prerequisites
-- Python 3.8+
-- Node.js 16+ and npm
-- Rust 1.70+ and Cargo (for desktop builds)
 
-### 📦 Setup Instructions
+- Python 3.8 or higher
+- Node.js 16 or higher
+- Git
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/Saleh-Ghalayini/mutli-tool-prototype.git
-   cd mutli-tool-prototype
-   ```
+### Backend Setup
 
-2. **Install Python dependencies**
-   ```bash
-   cd backend
-   pip install -r requirements.txt
-   ```
-
-3. **Install frontend dependencies**
-   ```bash
-   cd frontend
-   npm install
-   ```
-
-4. **📥 Download AI Model** (Required - 2.3GB)
-   - Download Microsoft Phi-3 Mini GGUF model
-   - Create folder: `backend/models/`
-   - Place model as: `backend/models/phi3-mini.gguf`
-   - **Note**: Model not included in repo due to size
-
-### 🏃‍♂️ Running the Application
-
-#### Option 1: Quick Launch (Windows)
-```bash
-# Double-click this file in project root
-run_app.bat
-```
-
-#### Option 2: Manual Development
-```bash
-# Terminal 1: Start backend
-cd backend && python main.py
-
-# Terminal 2: Start frontend  
-cd frontend && npm run dev
-
-# Open browser to http://localhost:8000
-```
-
-#### Option 3: Desktop App (Development)
-```bash
-cargo tauri dev
-```
-
-### 🏗️ Building for Production
+1. Navigate to the backend directory:
 
 ```bash
-# Build optimized frontend
-cd frontend && npm run build
-
-# Build standalone desktop executable  
-cargo tauri build
+cd backend
 ```
 
-## 📁 Project Structure
+2. Create and activate a virtual environment:
+
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+4. Download the AI model:
+   Place `phi3-mini.gguf` in the `models/` directory at the project root.
+
+### Frontend Setup
+
+1. Navigate to the frontend directory:
+
+```bash
+cd frontend
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+## Usage
+
+### Starting the Application
+
+1. Start the backend server:
+
+```bash
+cd backend
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+2. Start the frontend development server:
+
+```bash
+cd frontend
+npm run dev
+```
+
+3. Access the application at `http://localhost:5173`
+
+### Using the System
+
+#### Document Upload
+
+Use the API endpoint to upload PDF documents:
+
+```bash
+curl -X POST "http://localhost:8000/policy/upload" \
+     -H "Content-Type: multipart/form-data" \
+     -F "files=@your-policy.pdf"
+```
+
+#### Interactive Chat
+
+1. Open the web interface
+2. Type questions about your uploaded documents
+3. Receive real-time AI responses based on document content
+
+## API Endpoints
+
+### Health Check
+
+- **GET** `/health` - Application health status
+
+### Document Management
+
+- **POST** `/policy/upload` - Upload PDF documents for processing
+
+### Search and Query
+
+- **GET** `/policy/search?query=<your_question>` - Search documents and get AI responses
+
+## Configuration
+
+### Backend Settings
+
+Configuration is managed through `config.py`:
+
+- Application name and version
+- Debug mode settings
+- Environment variable support
+
+### Model Configuration
+
+LLM settings in `llm_service.py`:
+
+- Context window size (n_ctx)
+- Thread count for inference
+- Model path configuration
+
+### Frontend Configuration
+
+Vite configuration in `vite.config.ts`:
+
+- Development server settings
+- Build optimization
+- Plugin configuration
+
+## Development
+
+### Project Structure
 
 ```
 mutli-tool-prototype/
-├── 🐍 backend/                 # Python FastAPI backend
-│   ├── main.py                # API routes & application entry
-│   ├── services/              # Business logic services  
-│   │   ├── ai_service.py      # AI model management
-│   │   ├── pdf_service.py     # PDF processing
-│   │   └── ...                # Other services
-│   ├── requirements.txt       # Python dependencies
-│   └── models/               # AI model storage (gitignored)
-├── 🌐 frontend/               # Web frontend
+├── backend/                    # FastAPI backend
+│   ├── routers/               # API route handlers
+│   ├── services/              # Business logic
+│   │   └── policy/           # Policy-specific services
+│   ├── main.py               # Application entry point
+│   ├── config.py             # Configuration settings
+│   └── requirements.txt      # Python dependencies
+├── frontend/                  # Vue.js frontend
 │   ├── src/
-│   │   ├── index.html        # Main interface
-│   │   ├── main.js          # Application logic
-│   │   └── styles.css       # Modern styling
-│   ├── package.json         # Node dependencies
-│   └── dist/               # Built assets (gitignored)
-├── 🦀 src-tauri/             # Desktop app wrapper
-│   ├── src/lib.rs           # Rust backend integration
-│   ├── tauri.conf.json      # App configuration
-│   └── Cargo.toml          # Rust dependencies
-├── 📖 PROJECT_DOCUMENTATION.md # Complete technical docs
-├── 🚀 run_app.bat            # Quick launcher script
-└── 📋 README.md             # This file
+│   │   ├── components/       # Vue components
+│   │   ├── services/         # API communication
+│   │   └── style.css        # Global styles
+│   ├── package.json          # Node.js dependencies
+│   └── vite.config.ts       # Build configuration
+├── models/                   # AI model files
+├── policy_data/             # Document storage and vector DB
+└── llama.cpp/              # LLM inference binaries
 ```
 
-## 📖 Documentation
+### Adding New Features
 
-📚 **[Complete Technical Documentation](PROJECT_DOCUMENTATION.md)** includes:
-- 🏗️ Architecture overview and design patterns
-- 🤖 AI model integration and prompt engineering
-- ⚡ Performance characteristics and benchmarks  
-- 🔐 Security features and privacy guarantees
-- 🛠️ Development workflow and deployment guide
+1. Backend: Create new routers and services
+2. Frontend: Add components and update API services
+3. Testing: Use the health endpoint for connectivity verification
 
-## 🔒 Privacy & Security
+## Performance Considerations
 
-- ✅ **Zero data collection** - No telemetry or analytics
-- ✅ **Offline processing** - Documents never leave your machine
-- ✅ **Memory safety** - Rust ensures secure operations
-- ✅ **Local storage** - Temporary files auto-deleted
+### Memory Usage
 
-## 📊 Download & System Requirements
+- LLM model loaded once and reused
+- Vector embeddings cached in memory
+- Efficient chunk processing
 
-| Requirement | Minimum | Recommended |
-|-------------|---------|-------------|
-| **RAM** | 8GB | 16GB+ |
-| **Storage** | 4GB free | 8GB+ free |
-| **CPU** | Dual-core | Quad-core+ |
-| **OS** | Win 10+, macOS 10.15+, Ubuntu 18.04+ | Latest versions |
+### Response Times
 
-**Download Size**: ~2.8GB (includes AI model)
+- Streaming responses for immediate feedback
+- Optimized vector similarity calculations
+- Local inference eliminates network latency
 
-## 🤝 Contributing
+### Scalability
 
-1. 🍴 Fork the repository
-2. 🌟 Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. 💻 Make your changes
-4. ✅ Test thoroughly
-5. 📝 Commit changes (`git commit -m 'Add amazing feature'`)
-6. 🚀 Push to branch (`git push origin feature/amazing-feature`)
-7. 🔃 Open a Pull Request
+- Stateless API design
+- File-based storage for easy scaling
+- Configurable chunk sizes and model parameters
 
-## 📄 License
+## Troubleshooting
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Common Issues
 
-## 🙏 Acknowledgments
+1. **Model not found**: Ensure `phi3-mini.gguf` is in the `models/` directory
+2. **CORS errors**: Verify backend CORS configuration
+3. **Slow responses**: Check available system memory and CPU cores
+4. **Upload failures**: Confirm PDF files contain extractable text
 
-- Microsoft for the Phi-3 Mini model
-- Tauri team for the excellent desktop framework
-- FastAPI for the high-performance web framework
-- Contributors and the open-source community
+### Performance Optimization
 
----
+- Increase thread count for faster inference
+- Adjust chunk size based on document characteristics
+- Monitor memory usage with large document sets
 
-<div align="center">
+## License
 
-**🚀 Built with ❤️ for Privacy-First AI Processing**
-
-[⭐ Star this repo](https://github.com/Saleh-Ghalayini/mutli-tool-prototype) • [🐛 Report Bug](https://github.com/Saleh-Ghalayini/mutli-tool-prototype/issues) • [💡 Request Feature](https://github.com/Saleh-Ghalayini/mutli-tool-prototype/issues)
-
-</div>
+This project is open source and available under the MIT License.
