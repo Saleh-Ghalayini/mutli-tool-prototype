@@ -1,8 +1,15 @@
 <template>
+  <!-- 
+    Dynamic Class Binding:
+    - If message.isUser is true, adds 'user-message' class (aligns right, blue background).
+    - If message.isUser is false, adds 'ai-message' class (aligns left, dark-grey background).
+  -->
   <div class="message-bubble" :class="{ 'user-message': message.isUser, 'ai-message': !message.isUser }">
     <div class="message-content">
       <div class="message-text">
+        <!-- Render the message text. white-space: pre-wrap preserves newlines and formatting -->
         <p>{{ message.text }}</p>
+        <!-- Formatted timestamp display (e.g. 10:24 AM) -->
         <div class="message-time">
           {{ formatTime(message.timestamp) }}
         </div>
@@ -12,6 +19,12 @@
 </template>
 
 <script setup lang="ts">
+// ==============================================================================
+// MESSAGE BUBBLE COMPONENT
+// ==============================================================================
+// A presentational component responsible for displaying an individual chat entry.
+// Automatically distinguishes between user queries and AI responses.
+
 interface Message {
   id: number
   text: string
@@ -19,10 +32,14 @@ interface Message {
   timestamp: Date
 }
 
+// Receive the message object from parent ChatContainer
 defineProps<{
   message: Message
 }>()
 
+/**
+ * Format a Date object into a readable 12-hour or 24-hour time string (e.g. "02:30 PM")
+ */
 const formatTime = (date: Date) => {
   return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
 }

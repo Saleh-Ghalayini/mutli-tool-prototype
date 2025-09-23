@@ -1,0 +1,13 @@
+Requirements: 
+
+Users must be able to use the application without internet during runtime.
+The app must ask for the user's consent to connect the application to the internet for it to do specific stuff like updates, installing models, or other stuff.
+Users must be able to configure some of the model's settings (Temperature, I/O tokens, etc...) through simple UIs like buttons, switches, etc...
+Users must be aware about models that won't work on their machine due to insufficient resources (CPU, Ram, Storage, etc...).
+Users must be noticed when a process is going to consume a lot of their machine's resources or when the process is going to take more time than usual.
+Users will have to use a license key in order to activate their account.
+Users will have to pay only for the services that the app provides through the UI and not for each model the download. This gives the user the ability to download/use any model they want once they buy the product.
+The models should be pretrained on the server then added to the list of available models, where each model even if being the same initially will be pretrained on different datasets to do different tasks.
+users will have the ability to use the same license key on 3 different machines so incase the user changes his/her machine they'll still be able to use the product.
+The app should be able to read the machines properties/IDs in order to know which license key is on which machine.
+Users must be online to download the application and activate their account.

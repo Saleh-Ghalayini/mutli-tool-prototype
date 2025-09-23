@@ -25,39 +25,76 @@
 </template>
 
 <script setup lang="ts">
+// ==============================================================================
+// INPUT AREA COMPONENT
+// ==============================================================================
+// Responsible for:
+// 1. Providing an auto-expanding multi-line text input field
+// 2. Handling Enter / Shift+Enter keyboard events
+// 3. Emitting the message text to the parent ChatContainer component
+// 4. Disabling input and button while the AI is generating an answer
+
 import { ref, nextTick } from 'vue'
 
+// ------------------------------------------------------------------------------
+// Component Events (defineEmits)
+// ------------------------------------------------------------------------------
+// In Vue 3, child components do not modify parent state directly.
+// Instead, they "emit" custom events that parents listen to (e.g. @send-message="...").
 const emit = defineEmits<{
-  sendMessage: [message: string]
+  sendMessage: [message: string] // Emits an event named 'sendMessage' carrying the string payload
 }>()
 
+// ------------------------------------------------------------------------------
+// Component Properties (defineProps)
+// ------------------------------------------------------------------------------
+// Passed from parent: disabled is true when the AI is actively streaming a response
 defineProps<{
   disabled?: boolean
 }>()
 
+// Reactive variable bound to the <textarea> via v-model
 const message = ref('')
+// Template reference allowing direct access to the DOM <textarea> element
 const textareaRef = ref<HTMLTextAreaElement>()
 
+// ------------------------------------------------------------------------------
+// Dynamic Textarea Auto-Growing
+// ------------------------------------------------------------------------------
 const adjustHeight = () => {
   nextTick(() => {
     if (textareaRef.value) {
+      // Reset height to 'auto' first so shrinking works if text is deleted
       textareaRef.value.style.height = 'auto'
+      // Set height equal to scrollHeight (content height), capped at a maximum of 120px
       textareaRef.value.style.height = Math.min(textareaRef.value.scrollHeight, 120) + 'px'
     }
   })
 }
 
+// ------------------------------------------------------------------------------
+// Send Message Action
+// ------------------------------------------------------------------------------
 const sendMessage = () => {
+  // Only send if the input has non-empty text
   if (message.value.trim()) {
+    // Notify parent component with the typed message
     emit('sendMessage', message.value)
+    // Clear the input box
     message.value = ''
+    // Reset textarea height back to single-row
     adjustHeight()
   }
 }
 
+// ------------------------------------------------------------------------------
+// Keyboard Event Listener: Enter vs Shift+Enter
+// ------------------------------------------------------------------------------
 const handleKeyDown = (event: KeyboardEvent) => {
+  // If the user hits Enter WITHOUT pressing Shift, submit the message.
+  // If Shift+Enter is pressed, default behavior occurs (inserts a regular newline).
   if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault()
+    event.preventDefault() // Prevent insertion of a blank newline character
     sendMessage()
   }
 }

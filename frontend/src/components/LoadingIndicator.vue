@@ -1,6 +1,12 @@
 <template>
+  <!-- 
+    Loading Indicator:
+    Displayed while the backend performs similarity search and warms up the LLM
+    before the very first token chunk arrives in the frontend.
+  -->
   <div class="loading-indicator">
     <div class="loading-content">
+      <!-- 3 bouncing dots animated via CSS @keyframes typing -->
       <div class="typing-dots">
         <span></span>
         <span></span>
@@ -12,7 +18,12 @@
 </template>
 
 <script setup lang="ts">
-// No props needed for this component
+// ==============================================================================
+// LOADING INDICATOR COMPONENT
+// ==============================================================================
+// Purely visual component providing immediate visual feedback to the user
+// that their query is being processed, preventing the UI from feeling frozen.
+// No internal reactive state or props required.
 </script>
 
 <style scoped>

@@ -1,17 +1,27 @@
 <template>
+  <!-- Main application root wrapper -->
   <div id="app">
     <div class="app-container">
+      <!-- Top header branding -->
       <header class="app-header">
         <h1>🤖 AI Assistant</h1>
         <p>Ask me anything about your documents</p>
       </header>
       
+      <!-- Mount the main ChatContainer component where messages and input live -->
       <ChatContainer />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+// ==============================================================================
+// ROOT APPLICATION COMPONENT (App.vue)
+// ==============================================================================
+// In Vue.js single-page applications (SPA), App.vue serves as the top-level parent
+// component that is rendered inside index.html's <div id="app">.
+// It sets up the full-screen layout shell and hosts ChatContainer.
+
 import ChatContainer from './components/ChatContainer.vue'
 </script>
 
